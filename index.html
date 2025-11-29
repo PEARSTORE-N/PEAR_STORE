@@ -10,30 +10,164 @@
 :root{--bg:#f5f5f7;--card:#fff;--accent:#000000;--success:#34c759}
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial, sans-serif;background:var(--bg);color:#111}
-header{background:#000;color:#fff;padding:18px 20px;text-align:center;font-weight:700}
-.wrap{width:95%;max-width:1200px;margin:24px auto;display:grid;grid-template-columns:1fr 360px;gap:24px}
-.catalogo{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;}
-.producto{background:var(--card);border-radius:12px;padding:14px;box-shadow:0 6px 18px rgba(0,0,0,0.08);text-align:center;}
-.carousel{width:100%;height:160px;position:relative;overflow:hidden;border-radius:10px;margin-bottom:10px;}
-.carousel img{width:100%;height:100%;object-fit:cover;}
-.btn-slide{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.4);color:white;border:none;border-radius:6px;padding:6px 10px;cursor:pointer;}
-.prev{left:5px} .next{right:5px}
-.producto h4{margin:8px 0;font-size:16px}
-.producto .precio{font-weight:bold;margin:6px 0}
-.btn{padding:8px 12px;border-radius:8px;border:0;cursor:pointer;}
-.btn-comprar{background:var(--accent);color:#fff}
-aside{background:#fff;padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.1);}
-.linea-item{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee}
-.btn-eliminar{background:#ff3b30;color:#fff;border:0;border-radius:6px;padding:6px 8px;cursor:pointer;}
-.btn-finalizar{background:var(--success);color:#fff;width:100%;border:0;border-radius:8px;padding:10px;margin-top:12px;cursor:pointer;font-weight:bold;}
-input{width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;margin-bottom:10px;}
-@media(max-width:900px){.wrap{grid-template-columns:1fr}}
+
+/* ===== ANIMACIÓN DE ENTRADA DEL TÍTULO ===== */
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(120%);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-10%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.slide-in {
+  animation: slideInRight 2s ease-out forwards; /* <-- MÁS LENTO */
+}
+
+/* ===== HEADER ===== */
+header{
+  background:#000;
+  color:#fff;
+  padding:18px 20px;
+  text-align:center;
+  font-weight:700;
+  font-size:26px;
+  overflow:hidden;
+}
+
+.wrap{
+  width:95%;
+  max-width:1200px;
+  margin:24px auto;
+  display:grid;
+  grid-template-columns:1fr 360px;
+  gap:24px
+}
+
+.catalogo{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+  gap:18px;
+}
+
+.producto{
+  background:var(--card);
+  border-radius:12px;
+  padding:14px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+  text-align:center;
+}
+
+.carousel{
+  width:100%;
+  height:160px;
+  position:relative;
+  overflow:hidden;
+  border-radius:10px;
+  margin-bottom:10px;
+}
+
+.carousel img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.btn-slide{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  background:rgba(0,0,0,0.4);
+  color:white;
+  border:none;
+  border-radius:6px;
+  padding:6px 10px;
+  cursor:pointer;
+}
+
+.prev{left:5px}
+.next{right:5px}
+
+.producto h4{
+  margin:8px 0;
+  font-size:16px
+}
+
+.producto .precio{
+  font-weight:bold;
+  margin:6px 0
+}
+
+.btn{
+  padding:8px 12px;
+  border-radius:8px;
+  border:0;
+  cursor:pointer;
+}
+
+.btn-comprar{
+  background:var(--accent);
+  color:#fff
+}
+
+aside{
+  background:#fff;
+  padding:16px;
+  border-radius:12px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.1);
+}
+
+.linea-item{
+  display:flex;
+  justify-content:space-between;
+  padding:6px 0;
+  border-bottom:1px solid #eee
+}
+
+.btn-eliminar{
+  background:#ff3b30;
+  color:#fff;
+  border:0;
+  border-radius:6px;
+  padding:6px 8px;
+  cursor:pointer;
+}
+
+.btn-finalizar{
+  background:var(--success);
+  color:#fff;
+  width:100%;
+  border:0;
+  border-radius:8px;
+  padding:10px;
+  margin-top:12px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+input{
+  width:100%;
+  padding:8px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  margin-bottom:10px;
+}
+
+@media(max-width:900px){
+  .wrap{grid-template-columns:1fr}
+}
 </style>
 
 </head>
 <body>
 
-<header>PEAR STORE</header>
+<header class="slide-in">PEAR STORE</header>
 
 <div style="text-align:center; margin-top:12px;">
 <a href="https://www.instagram.com/pear_storre" target="_blank"
@@ -61,7 +195,7 @@ Síguenos en Instagram
 </div>
 
 <script>
-const SCRIPT_URL = "TU_URL_DE_GOOGLE_SCRIPT"; // Reemplaza con tu Web App
+const SCRIPT_URL = "TU_URL_DE_GOOGLE_SCRIPT";
 
 const productos = [
   {id:1,nombre:"AirPods 2 Pro",precio:450,imagenes:["IMG-1235.webp","IMG-1232.webp","IMG-1235.webp"]},
@@ -73,7 +207,6 @@ const productos = [
 
 let carrito = [];
 
-// Render catálogo
 function renderizarCatalogo(){
   const cont=document.getElementById("catalogo");
   cont.innerHTML="";
@@ -106,7 +239,6 @@ function activarCarruseles(){
   });
 }
 
-// Carrito
 function agregarCarrito(id){
   const p=productos.find(x=>x.id===id);
   let item=carrito.find(x=>x.id===id);
@@ -142,7 +274,6 @@ function eliminar(id){
   actualizarCarrito();
 }
 
-// Enviar pedido
 function enviarPedido(){
   if(carrito.length===0){alert("El carrito está vacío"); return;}
 
@@ -162,16 +293,12 @@ function enviarPedido(){
     fecha: new Date().toLocaleString()
   };
 
-  // Enviar a Google Sheets
   fetch(SCRIPT_URL, {
     method:"POST",
     body: JSON.stringify(pedido),
     headers: {"Content-Type":"application/json"}
-  }).then(res=>res.json())
-    .then(()=>{alert("Pedido registrado en Google Sheets correctamente");})
-    .catch(err=>{console.error("Error enviando a Sheets",err);});
+  });
 
-  // WhatsApp
   let mensaje="📦 *NUEVO PEDIDO*\n\n";
   carrito.forEach(i=>{
     mensaje+=`• ${i.nombre} x${i.cantidad} = $${i.cantidad*i.precio}\n`;
@@ -179,7 +306,8 @@ function enviarPedido(){
 
   let total=carrito.reduce((a,b)=>a+(b.precio*b.cantidad),0);
 
-  mensaje+=`\n💰 *TOTAL:* $${total}\n\n📍 *DOMICILIO*\nCalle: ${calle}\nColonia: ${colonia}\nMunicipio: ${municipio}\n\n`;
+  mensaje+=`\n💰 *TOTAL:* $${total}\n\n📍 *DOMICILIO*\n`;
+  mensaje+=`Calle: ${calle}\nColonia: ${colonia}\nMunicipio: ${municipio}\n\n`;
 
   const numero="8141261141";
   const url=`https://wa.me/52${numero}?text=${encodeURIComponent(mensaje)}`;
