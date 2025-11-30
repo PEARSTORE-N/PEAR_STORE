@@ -9,94 +9,29 @@
 :root{--bg:#f5f5f7;--card:#fff;--accent:#000000;--success:#34c759}
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial, sans-serif;background:var(--bg);color:#111}
-
-/* ===== ANIMACIÓN DE ENTRADA DEL TÍTULO ===== */
-@keyframes slideInRight {
-  0% {opacity: 0; transform: translateX(120%);}
-  60% {opacity: 1; transform: translateX(-10%);}
-  100% {transform: translateX(0);}
-}
-
+@keyframes slideInRight {0%{opacity:0;transform:translateX(120%);}60%{opacity:1;transform:translateX(-10%);}100%{transform:translateX(0);}}
 .slide-in {animation: slideInRight 2s ease-out forwards;}
-
-/* ===== HEADER ===== */
-header{
-  background:#000;color:#fff;padding:18px 20px;
-  text-align:center;font-weight:700;font-size:26px;overflow:hidden;
-}
-
-.wrap{
-  width:95%; max-width:1200px;
-  margin:24px auto;
-  display:grid; grid-template-columns:1fr 360px; gap:24px
-}
-
-.catalogo{
-  display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:18px;
-}
-
-.producto{
-  background:var(--card); border-radius:12px; padding:14px;
-  box-shadow:0 6px 18px rgba(0,0,0,0.08); text-align:center;
-}
-
-.carousel{
-  width:100%; height:160px; position:relative;
-  overflow:hidden; border-radius:10px; margin-bottom:10px;
-}
-
+header{background:#000;color:#fff;padding:18px 20px;text-align:center;font-weight:700;font-size:26px;overflow:hidden;}
+.wrap{width:95%; max-width:1200px;margin:24px auto;display:grid; grid-template-columns:1fr 360px; gap:24px}
+.catalogo{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:18px;}
+.producto{background:var(--card); border-radius:12px; padding:14px; box-shadow:0 6px 18px rgba(0,0,0,0.08); text-align:center;}
+.carousel{width:100%; height:160px; position:relative; overflow:hidden; border-radius:10px; margin-bottom:10px;}
 .carousel img{width:100%; height:100%; object-fit:cover;}
-
-.btn-slide{
-  position:absolute; top:50%; transform:translateY(-50%);
-  background:rgba(0,0,0,0.4); color:white; border:none;
-  border-radius:6px; padding:6px 10px; cursor:pointer;
-}
-
+.btn-slide{position:absolute; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.4); color:white; border:none; border-radius:6px; padding:6px 10px; cursor:pointer;}
 .prev{left:5px} .next{right:5px}
-
 .producto h4{margin:8px 0; font-size:16px}
 .producto .precio{font-weight:bold; margin:6px 0}
 .btn{padding:8px 12px; border-radius:8px; border:0; cursor:pointer;}
 .btn-comprar{background:var(--accent); color:#fff}
-
-aside{
-  background:#fff; padding:16px; border-radius:12px;
-  box-shadow:0 6px 18px rgba(0,0,0,0.1);
-}
-
-.linea-item{
-  display:flex; justify-content:space-between; padding:6px 0;
-  border-bottom:1px solid #eee
-}
-
-.btn-eliminar{
-  background:#ff3b30; color:#fff; border:0;
-  border-radius:6px; padding:6px 8px; cursor:pointer;
-}
-
-.btn-finalizar{
-  background:var(--success); color:#fff; width:100%;
-  border:0; border-radius:8px; padding:10px; margin-top:12px;
-  cursor:pointer; font-weight:bold;
-}
-
-input{
-  width:100%; padding:8px; border-radius:8px;
-  border:1px solid #ccc; margin-bottom:10px;
-}
-
-/* ===== ESTILO PARA LA SECCIÓN DE TRANSFERENCIA ===== */
-.transferencia{
-  background:#f0f0f0; border-radius:10px; padding:12px;
-  margin:12px 0; font-size:14px; line-height:1.5; color:#111;
-}
-
+aside{background:#fff; padding:16px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.1);}
+.linea-item{display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #eee}
+.btn-eliminar{background:#ff3b30; color:#fff; border:0; border-radius:6px; padding:6px 8px; cursor:pointer;}
+.btn-finalizar{background:var(--success); color:#fff; width:100%; border:0; border-radius:8px; padding:10px; margin-top:12px; cursor:pointer; font-weight:bold;}
+input{width:100%; padding:8px; border-radius:8px; border:1px solid #ccc; margin-bottom:10px;}
+.transferencia{background:#f0f0f0; border-radius:10px; padding:12px; margin:12px 0; font-size:14px; line-height:1.5; color:#111;}
 .transferencia b{color:#000;}
-
 @media(max-width:900px){ .wrap{grid-template-columns:1fr} }
 </style>
-
 </head>
 <body>
 
@@ -123,8 +58,10 @@ Síguenos en Instagram
     <input id="colonia" placeholder="Colonia">
     <input id="municipio" placeholder="Municipio">
     <input id="estado" placeholder="Estado">
+    <input id="cp" placeholder="Código Postal">
 
-    <!-- NUEVO APARTADO DE TRANSFERENCIA BANCARIA -->
+    <div id="envioDHL" style="font-weight:bold;margin:10px 0;">Costo de envío: —</div>
+
     <div class="transferencia">
       <h3>Transferencia Bancaria</h3>
       <p>
@@ -135,7 +72,7 @@ Síguenos en Instagram
       </p>
       <p>
         ¡Manda el comprobante a nuestro WhatsApp!<br>
-        WhatsApp: <b>8141261141</b>
+        WhatsApp: <b>8145344751</b>
       </p>
       <p style="font-size:0.9em;color:#555;">
         (Ya que se refleje el dinero en la cuenta se comienza a hacer el pedido)
@@ -158,13 +95,91 @@ const productos = [
 ];
 
 let carrito = [];
+let costoEnvio = 0;
 
+// ==== DHL ZONAS + TARIFAS ====
+const DHL_DATA = {
+  "origen": {"estado":"Nuevo León","cp":"66004","grupo":"G3"},
+  "zonas":[
+    {"estado":"Ciudad de México","cp_inicio":1000,"cp_fin":16999,"grupo":"G1"},
+    {"estado":"Aguascalientes","cp_inicio":20000,"cp_fin":20999,"grupo":"G2"},
+    {"estado":"Baja California","cp_inicio":21000,"cp_fin":22999,"grupo":"G2"},
+    {"estado":"Baja California Sur","cp_inicio":23000,"cp_fin":23999,"grupo":"G2"},
+    {"estado":"Campeche","cp_inicio":24000,"cp_fin":24999,"grupo":"G4"},
+    {"estado":"Coahuila","cp_inicio":25000,"cp_fin":27999,"grupo":"G3"},
+    {"estado":"Colima","cp_inicio":28000,"cp_fin":28999,"grupo":"G4"},
+    {"estado":"Chiapas","cp_inicio":29000,"cp_fin":30999,"grupo":"G5"},
+    {"estado":"Chihuahua","cp_inicio":31000,"cp_fin":33999,"grupo":"G3"},
+    {"estado":"Durango","cp_inicio":34000,"cp_fin":35999,"grupo":"G3"},
+    {"estado":"Guanajuato","cp_inicio":36000,"cp_fin":38999,"grupo":"G4"},
+    {"estado":"Guerrero","cp_inicio":39000,"cp_fin":41999,"grupo":"G5"},
+    {"estado":"Hidalgo","cp_inicio":42000,"cp_fin":43999,"grupo":"G4"},
+    {"estado":"Jalisco","cp_inicio":44000,"cp_fin":49999,"grupo":"G4"},
+    {"estado":"México","cp_inicio":50000,"cp_fin":57999,"grupo":"G1"},
+    {"estado":"Michoacán","cp_inicio":58000,"cp_fin":61999,"grupo":"G5"},
+    {"estado":"Morelos","cp_inicio":62000,"cp_fin":62999,"grupo":"G4"},
+    {"estado":"Nayarit","cp_inicio":63000,"cp_fin":63999,"grupo":"G4"},
+    {"estado":"Nuevo León","cp_inicio":64000,"cp_fin":67999,"grupo":"G3"},
+    {"estado":"Oaxaca","cp_inicio":68000,"cp_fin":71999,"grupo":"G5"},
+    {"estado":"Puebla","cp_inicio":72000,"cp_fin":75999,"grupo":"G5"},
+    {"estado":"Querétaro","cp_inicio":76000,"cp_fin":76999,"grupo":"G4"},
+    {"estado":"Quintana Roo","cp_inicio":77000,"cp_fin":77999,"grupo":"G5"},
+    {"estado":"San Luis Potosí","cp_inicio":78000,"cp_fin":79999,"grupo":"G4"},
+    {"estado":"Sinaloa","cp_inicio":80000,"cp_fin":82999,"grupo":"G3"},
+    {"estado":"Sonora","cp_inicio":83000,"cp_fin":85999,"grupo":"G3"},
+    {"estado":"Tabasco","cp_inicio":86000,"cp_fin":86999,"grupo":"G5"},
+    {"estado":"Tamaulipas","cp_inicio":87000,"cp_fin":89999,"grupo":"G3"},
+    {"estado":"Tlaxcala","cp_inicio":90000,"cp_fin":90999,"grupo":"G4"},
+    {"estado":"Veracruz","cp_inicio":91000,"cp_fin":96999,"grupo":"G5"},
+    {"estado":"Yucatán","cp_inicio":97000,"cp_fin":97999,"grupo":"G5"},
+    {"estado":"Zacatecas","cp_inicio":98000,"cp_fin":99999,"grupo":"G4"}
+  ],
+  "tarifas": {
+    "G3":{"G3":{"1":250,"3":300,"5":350,"10":500},"G1":{"1":300,"3":380,"5":450,"10":650},"G2":{"1":280,"3":350,"5":420,"10":600},"G4":{"1":320,"3":400,"5":470,"10":680},"G5":{"1":330,"3":420,"5":500,"10":720}}
+  }
+};
+
+// ==== Funciones DHL ====
+function obtenerGrupoPorCP(cp){
+  const cpInt = parseInt(cp,10);
+  for(const zona of DHL_DATA.zonas){
+    if(cpInt>=zona.cp_inicio && cpInt<=zona.cp_fin) return zona.grupo;
+  }
+  return null;
+}
+
+function cotizarEnvioDHL(cpDestino, pesoKg){
+  const grupoOrigen = DHL_DATA.origen.grupo;
+  const grupoDestino = obtenerGrupoPorCP(cpDestino);
+  if(!grupoDestino) return null;
+  const tarifasOrigen = DHL_DATA.tarifas[grupoOrigen];
+  if(!tarifasOrigen) return null;
+  const tarifasDestino = tarifasOrigen[grupoDestino];
+  if(!tarifasDestino) return null;
+  const rangos = Object.keys(tarifasDestino).map(w=>parseFloat(w)).sort((a,b)=>a-b);
+  for(const w of rangos){
+    if(pesoKg<=w) return tarifasDestino[w];
+  }
+  return null;
+}
+
+// ==== Actualiza envío automáticamente ====
+function actualizarEnvio(){
+  const cp = document.getElementById("cp").value.trim();
+  if(!cp || cp.length<5){document.getElementById("envioDHL").innerText="Costo de envío: —"; costoEnvio=0; return;}
+  const pesoKg = carrito.reduce((a,b)=>a+b.cantidad*0.5,0.5); // 0.5kg por producto aprox.
+  const precio = cotizarEnvioDHL(cp,pesoKg);
+  if(!precio){document.getElementById("envioDHL").innerText="Código postal no válido."; costoEnvio=0; return;}
+  costoEnvio=precio;
+  document.getElementById("envioDHL").innerText="Costo de envío DHL: $"+precio;
+  actualizarCarrito();
+}
+
+// ==== Carrito ====
 function renderizarCatalogo(){
-  const cont=document.getElementById("catalogo");
-  cont.innerHTML="";
+  const cont=document.getElementById("catalogo"); cont.innerHTML="";
   productos.forEach(p=>{
-    const div=document.createElement("div");
-    div.className="producto";
+    const div=document.createElement("div"); div.className="producto";
     div.innerHTML=`
       <div class="carousel" data-id="${p.id}">
         <img src="${p.imagenes[0]}" data-index="0">
@@ -194,59 +209,38 @@ function activarCarruseles(){
 function agregarCarrito(id){
   const p=productos.find(x=>x.id===id);
   let item=carrito.find(x=>x.id===id);
-  if(item) item.cantidad++;
-  else carrito.push({id:p.id,nombre:p.nombre,precio:p.precio,cantidad:1});
-  actualizarCarrito();
+  if(item) item.cantidad++; else carrito.push({id:p.id,nombre:p.nombre,precio:p.precio,cantidad:1});
+  actualizarEnvio();
 }
 
 function actualizarCarrito(){
-  const cont=document.getElementById("carritoItems");
-  cont.innerHTML="";
-  if(carrito.length===0){
-    cont.innerHTML="<p>El carrito está vacío.</p>";
-    document.getElementById("total").innerText="Total: $0";
-    return;
-  }
-
-  let total=0;
-  carrito.forEach(i=>{
-    const sub=i.precio*i.cantidad; total+=sub;
-    cont.innerHTML+=`
-      <div class="linea-item">
-        <div><b>${i.nombre}</b><br>$${i.precio} x ${i.cantidad} = $${sub}</div>
-        <button class="btn-eliminar" onclick="eliminar(${i.id})">X</button>
-      </div>`;
-  });
-
-  document.getElementById("total").innerText="Total: $"+total;
+  const cont=document.getElementById("carritoItems"); cont.innerHTML="";
+  if(carrito.length===0){cont.innerHTML="<p>El carrito está vacío.</p>"; document.getElementById("total").innerText="Total: $0"; return;}
+  let total=0; carrito.forEach(i=>{const sub=i.precio*i.cantidad; total+=sub;
+    cont.innerHTML+=`<div class="linea-item"><div><b>${i.nombre}</b><br>$${i.precio} x ${i.cantidad} = $${sub}</div><button class="btn-eliminar" onclick="eliminar(${i.id})">X</button></div>`;});
+  if(costoEnvio>0) document.getElementById("total").innerText="Total: $"+(total+costoEnvio); else document.getElementById("total").innerText="Total: $"+total;
 }
 
-function eliminar(id){
-  carrito=carrito.filter(i=>i.id!==id);
-  actualizarCarrito();
-}
+function eliminar(id){carrito=carrito.filter(i=>i.id!==id); actualizarEnvio();}
 
+// ==== Enviar pedido ====
 function enviarPedido(){
   if(carrito.length===0){alert("El carrito está vacío"); return;}
-
   const calle=document.getElementById("calle").value.trim();
   const colonia=document.getElementById("colonia").value.trim();
   const municipio=document.getElementById("municipio").value.trim();
   const estado=document.getElementById("estado").value.trim();
-
-  if(!calle||!colonia||!municipio||!estado){
-    alert("Completa todos los datos de envío.");
-    return;
-  }
-
+  const cp=document.getElementById("cp").value.trim();
+  if(!calle||!colonia||!municipio||!estado||!cp){alert("Completa todos los datos de envío."); return;}
+  
   const pedido = {
-    cliente: {calle,colonia,municipio,estado},
-    productos: carrito,
-    total: carrito.reduce((a,b)=>a+b.precio*b.cantidad,0),
-    fecha: new Date().toLocaleString()
+    cliente:{calle,colonia,municipio,estado,cp},
+    productos:carrito,
+    total:carrito.reduce((a,b)=>a+b.precio*b.cantidad,0)+costoEnvio,
+    fecha:new Date().toLocaleString()
   };
 
-  fetch(SCRIPT_URL, {
+  fetch(SCRIPT_URL,{
     method:"POST",
     body: JSON.stringify(pedido),
     headers: {"Content-Type":"application/json"}
@@ -257,18 +251,19 @@ function enviarPedido(){
     mensaje+=`• ${i.nombre} x${i.cantidad} = $${i.cantidad*i.precio}\n`;
   });
 
-  let total=carrito.reduce((a,b)=>a+(b.precio*b.cantidad),0);
+  let total=carrito.reduce((a,b)=>a+(b.precio*b.cantidad),0)+costoEnvio;
+  mensaje+=`\n💰 *TOTAL:* $${total}\n🚚 *ENVÍO DHL:* $${costoEnvio}\n\n📍 *DOMICILIO*\nCalle: ${calle}\nColonia: ${colonia}\nMunicipio: ${municipio}\nEstado: ${estado}\nCP: ${cp}`;
 
-  mensaje+=`\n💰 *TOTAL:* $${total}\n\n📍 *DOMICILIO*\n`;
-  mensaje+=`Calle: ${calle}\nColonia: ${colonia}\nMunicipio: ${municipio}\nEstado: ${estado}\n\n`;
+  // Número actualizado
+  const numero="8145344751";
+  window.open("https://wa.me/52"+numero+"?text="+encodeURIComponent(mensaje),"_blank");
 
-  const numero="8141261141";
-  const url=`https://wa.me/52${numero}?text=${encodeURIComponent(mensaje)}`;
-  window.open(url,"_blank");
-
-  carrito=[];
-  actualizarCarrito();
+  carrito=[]; costoEnvio=0; actualizarCarrito(); 
+  document.getElementById("envioDHL").innerText="Costo de envío: —";
 }
+
+// ==== Eventos CP ====
+document.getElementById("cp").addEventListener("input", actualizarEnvio);
 
 renderizarCatalogo();
 actualizarCarrito();
