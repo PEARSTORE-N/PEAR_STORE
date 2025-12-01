@@ -115,10 +115,10 @@ header{
   display:flex;
   flex-direction:column;
 }
-
-.panel-carrito.abierto{
-  right:0;
+.panel-carrito.abierto {
+  right: 0;
 }
+
 
 /* Contenido scrollable */
 .panel-carrito .contenido-carrito{
@@ -130,9 +130,42 @@ header{
 
 /* Botón fijo */
 .panel-carrito .footer-carrito{
-  padding:12px 20px;
+  padding:40px 80px;
   border-top:1px solid #eee;
   background:white;
+  position:sticky;
+  bottom:0;
+  z-index:50;
+}
+
+
+/* Botón enviar pedido */
+.btn-finalizar{
+  background:var(--success); 
+  color:#fff; 
+  width:100%;
+  border:0; 
+  border-radius:10px; 
+  padding:12px;
+  cursor:pointer; 
+  font-weight:bold; 
+  font-size:16px;
+}
+.btn-finalizar:hover{background:#28a745}
+
+input{
+  width:100%; padding:8px; margin:6px 0;
+  border-radius:8px; border:1px solid #ccc; font-size:14px;
+}
+
+.btn-eliminar{
+  background:#ff3b30; color:#fff; border:0; border-radius:6px;
+  padding:6px 10px; cursor:pointer;
+}
+
+.linea-item{
+  display:flex; justify-content:space-between; padding:8px 0;
+  border-bottom:1px solid #eee; font-size:14px;
 }
 
 /* Cerrar botón */
@@ -191,6 +224,8 @@ header{
   z-index: 99999;
   font-weight: bold;
 }
+
+/* Mostrar toast */
 .toast.mostrar {
   opacity: 1;
   transform: translateY(0);
@@ -206,29 +241,6 @@ header{
   border-color:var(--accent);
   background:#eaeaea;
 }
-
-.btn-finalizar{
-  background:var(--success); color:#fff; width:100%;
-  border:0; border-radius:10px; padding:12px;
-  margin-top:0;
-  cursor:pointer; font-weight:bold; font-size:16px;
-}
-.btn-finalizar:hover{background:#28a745}
-
-input{
-  width:100%; padding:8px; margin:6px 0;
-  border-radius:8px; border:1px solid #ccc; font-size:14px;
-}
-
-.btn-eliminar{
-  background:#ff3b30; color:#fff; border:0; border-radius:6px;
-  padding:6px 10px; cursor:pointer;
-}
-
-.linea-item{
-  display:flex; justify-content:space-between; padding:8px 0;
-  border-bottom:1px solid #eee; font-size:14px;
-}
 </style>
 </head>
 
@@ -237,15 +249,10 @@ input{
 <header>
   PEAR STORE 
   <span id="cartCounter">0</span>
-
-  <!-- Botón Carrito -->
   <button id="btnCarrito" onclick="abrirCarrito()">Carrito</button>
 </header>
 
-<!-- Fondo oscuro -->
 <div id="fondoOscuro" class="fondo-oscuro oculto"></div>
-
-<!-- Toast -->
 <div id="toast" class="toast">Producto agregado ✔️</div>
 
 <div class="wrap">
@@ -327,12 +334,10 @@ function renderizarCatalogo(){
         <button class="btn-slide prev">‹</button>
         <button class="btn-slide next">›</button>
       </div>
-
       <h4>${p.nombre}</h4>
       <div class="precio">$${p.precio}</div>
       <button class="btn btn-comprar" onclick="agregarCarrito(${p.id})">Comprar</button>
     `;
-
     cont.appendChild(div);
   });
 
@@ -346,15 +351,8 @@ function activarCarruseles(){
     const img=c.querySelector("img");
     let index=0;
 
-    c.querySelector(".next").onclick=()=>{
-      index=(index+1)%p.imagenes.length;
-      img.src=p.imagenes[index];
-    };
-
-    c.querySelector(".prev").onclick=()=>{
-      index=(index-1+p.imagenes.length)%p.imagenes.length;
-      img.src=p.imagenes[index];
-    };
+    c.querySelector(".next").onclick=()=>{ index=(index+1)%p.imagenes.length; img.src=p.imagenes[index]; };
+    c.querySelector(".prev").onclick=()=>{ index=(index-1+p.imagenes.length)%p.imagenes.length; img.src=p.imagenes[index]; };
   });
 }
 
@@ -363,25 +361,20 @@ function activarCarruseles(){
 ---------------------------- */
 function actualizarCarrito(){
   localStorage.setItem("carrito", JSON.stringify(carrito));
-
   const cont=document.getElementById("carritoItems");
   cont.innerHTML="";
-
   if(carrito.length===0){
     cont.innerHTML="<p>El carrito está vacío.</p>";
     document.getElementById("total").innerText="Total: $0";
     document.getElementById("cartCounter").innerText = 0;
     return;
   }
-
   let total=0;
   let totalCantidad=0;
-
   carrito.forEach(i=>{
     const sub=i.precio*i.cantidad;
     total+=sub;
     totalCantidad+=i.cantidad;
-
     cont.innerHTML+=`
       <div class="linea-item">
         <div>
@@ -394,7 +387,6 @@ function actualizarCarrito(){
             <button onclick="cambiarCantidad(${i.id}, 1)" style="padding:4px 10px;">+</button>
           </div>
         </div>
-
         <div style="text-align:right;">
           <div>$${sub}</div>
           <button class="btn-eliminar" onclick="cambiarCantidad(${i.id}, -${i.cantidad})">X</button>
@@ -410,12 +402,8 @@ function actualizarCarrito(){
 function cambiarCantidad(id, cambio){
   let item = carrito.find(x=>x.id===id);
   if(!item) return;
-
   item.cantidad += cambio;
-  if(item.cantidad <=0){
-    carrito = carrito.filter(x=>x.id!==id);
-  }
-
+  if(item.cantidad <=0){ carrito = carrito.filter(x=>x.id!==id); }
   actualizarCarrito();
 }
 
@@ -436,25 +424,18 @@ function abrirCarrito(){
   document.getElementById("fondoOscuro").classList.remove("oculto");
   document.querySelector(".wrap").classList.add("contenido-desplazado");
 }
-
 function cerrarCarrito(){
   document.getElementById("panelCarrito").classList.remove("abierto");
   document.getElementById("fondoOscuro").classList.add("oculto");
   document.querySelector(".wrap").classList.remove("contenido-desplazado");
 }
-
-/* Cerrar al hacer clic fuera */
 document.getElementById("fondoOscuro").addEventListener("click", cerrarCarrito);
 
 /* ----------------------------
    DRAG PARA CERRAR
 ---------------------------- */
 let startX = 0;
-
-document.getElementById("panelCarrito").addEventListener("touchstart", e=>{
-  startX = e.touches[0].clientX;
-});
-
+document.getElementById("panelCarrito").addEventListener("touchstart", e=>{ startX = e.touches[0].clientX; });
 document.getElementById("panelCarrito").addEventListener("touchmove", e=>{
   let diff = startX - e.touches[0].clientX;
   if(diff < -60) cerrarCarrito();
@@ -466,10 +447,8 @@ document.getElementById("panelCarrito").addEventListener("touchmove", e=>{
 function agregarCarrito(id){
   const p = productos.find(x=>x.id===id);
   let item = carrito.find(x=>x.id===id);
-
   if(item) item.cantidad++;
   else carrito.push({id:p.id,nombre:p.nombre,precio:p.precio,cantidad:1});
-
   actualizarCarrito();
   mostrarToast();
 }
@@ -479,10 +458,8 @@ function agregarCarrito(id){
 ---------------------------- */
 function seleccionarEntrega(tipo){
   metodoEntrega = tipo;
-
   document.getElementById("domicilioCaja").classList.remove("selected");
   document.getElementById("personalCaja").classList.remove("selected");
-
   if(tipo==="domicilio"){
     document.getElementById("domicilioCaja").classList.add("selected");
     document.getElementById("direccionCampos").style.display="block";
@@ -491,13 +468,10 @@ function seleccionarEntrega(tipo){
     document.getElementById("direccionCampos").style.display="none";
   }
 }
-
 function seleccionarPago(metodo){
   metodoPagoSeleccionado = metodo;
-
   document.getElementById("transferenciaCaja").classList.remove("selected");
   document.getElementById("efectivoCaja").classList.remove("selected");
-
   if(metodo==="transferencia"){
     document.getElementById("transferenciaCaja").classList.add("selected");
     document.getElementById("transferenciaInfo").style.display="block";
@@ -510,40 +484,29 @@ function seleccionarPago(metodo){
 /* ----------------------------
    ENVIAR PEDIDO POR WHATSAPP
 ---------------------------- */
-function abrirWhatsApp(){
-  if(carrito.length===0){
-    alert("El carrito está vacío.");
-    return;
-  }
+function abrirWhatsApp() {
+  if (carrito.length === 0) { alert("El carrito está vacío."); return; }
 
-  let mensaje = "📦 *Pedido PEAR STORE*%0A";
-  mensaje += "Método de entrega: " + (metodoEntrega==="domicilio" ? "Domicilio" : "Entrega personal") + "%0A";
-  mensaje += "Método de pago: " + (metodoPagoSeleccionado==="transferencia" ? "Transferencia" : "Efectivo") + "%0A%0A";
-
-  carrito.forEach(i=>{
-    mensaje += `${i.nombre} - ${i.cantidad} x $${i.precio} = $${i.cantidad*i.precio}%0A`;
+  let mensaje = "Hola, quiero hacer un pedido:\n";
+  carrito.forEach(i => {
+    mensaje += `${i.nombre} x${i.cantidad} = $${i.precio*i.cantidad}\n`;
   });
-
-  const total = carrito.reduce((sum, i)=>sum + i.precio*i.cantidad, 0);
-  mensaje += `%0ATotal: $${total}%0A`;
-
+  mensaje += `Total: $${carrito.reduce((sum,i)=>sum+i.precio*i.cantidad,0)}\n`;
+  mensaje += `Método de entrega: ${metodoEntrega}\n`;
   if(metodoEntrega==="domicilio"){
-    const nombre=document.getElementById("nombre").value;
-    const calle=document.getElementById("calle").value;
-    const colonia=document.getElementById("colonia").value;
-    const ciudad=document.getElementById("ciudad").value;
-    mensaje += `%0ADatos de envío:%0ANombre: ${nombre}%0ACalle: ${calle}%0AColonia: ${colonia}%0ACiudad: ${ciudad}`;
+    mensaje += `Nombre: ${document.getElementById("nombre").value}\n`;
+    mensaje += `Calle: ${document.getElementById("calle").value}\n`;
+    mensaje += `Colonia: ${document.getElementById("colonia").value}\n`;
+    mensaje += `Ciudad: ${document.getElementById("ciudad").value}\n`;
   }
+  mensaje += `Método de pago: ${metodoPagoSeleccionado}`;
 
-  // Número de WhatsApp (sin +, formato internacional)
-  const numero = "5218145344751"; // México ejemplo
-  const url = `https://wa.me/${numero}?text=${mensaje}`;
-
-  window.open(url,"_blank");
+  let url = "https://wa.me/5218145344751?text=" + encodeURIComponent(mensaje);
+  window.open(url, "_blank");
 }
 
 /* ----------------------------
-   INICIALIZACIÓN
+   INICIALIZAR
 ---------------------------- */
 renderizarCatalogo();
 actualizarCarrito();
@@ -551,3 +514,4 @@ actualizarCarrito();
 
 </body>
 </html>
+ 
