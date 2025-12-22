@@ -1,245 +1,144 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PEAR STORE</title>
 
 <style>
 :root{
-  --bg:#fdfdfd;
-  --card:#ffffff;
-  --accent:#000000;
-  --accent-hover:#333333;
-  --success:blue;
-  --shadow:0 6px 20px rgba(0,0,0,0.08);
+  --shadow:0 6px 20px rgba(0,0,0,.08);
 }
-
-*{box-sizing:border-box}
-body{margin:0;font-family:'Segoe UI', sans-serif;background:var(--bg);color:#111;line-height:1.5}
-a{text-decoration:none}
-
-/* Header */
+body{margin:0;font-family:'Segoe UI',sans-serif;background:#fdfdfd}
 header{
-  background:#000;color:#fff;padding:20px 0;text-align:center;font-weight:700;
-  font-size:28px;letter-spacing:1px;text-transform:uppercase;
-  box-shadow:0 4px 12px rgba(0,0,0,0.2);
+  background:#000;color:#fff;padding:20px;
+  text-align:center;font-size:28px;font-weight:bold;
   position:relative;
 }
-
 #cartCounter{
-  position:absolute;
-  top:15px;
-  right:20px;
-  background:#fff;
-  color:#000;
-  font-weight:bold;
-  padding:4px 10px;
-  border-radius:50%;
-  font-size:14px;
-  box-shadow:0 2px 6px rgba(0,0,0,0.3);
+  position:absolute;top:15px;right:20px;
+  background:#fff;color:#000;font-weight:bold;
+  padding:4px 10px;border-radius:50%;
 }
-
-/* BOTÓN CARRITO */
 #btnCarrito{
-  position:absolute;
-  right:70px;
-  top:12px;
-  background:#fff;
-  color:#000;
-  padding:6px 12px;
-  border-radius:8px;
-  border:0;
-  cursor:pointer;
-  font-weight:bold;
+  position:absolute;right:80px;top:12px;
+  background:#fff;border:0;padding:6px 12px;
+  border-radius:8px;font-weight:bold;cursor:pointer;
 }
-
-/* Layout */
-.wrap{
-  width:95%; max-width:1200px;margin:32px auto;
-  transition:0.45s ease;
-}
-
-/* Catálogo */
+.wrap{width:95%;max-width:1200px;margin:30px auto}
 .catalogo{
-  display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+  gap:20px;
 }
-
 .producto{
-  background:var(--card); border-radius:14px; padding:18px;
-  box-shadow:var(--shadow); text-align:center;
-  transition:transform 0.3s, box-shadow 0.3s;
-  position:relative;
-}
-.producto:hover{
-  transform:translateY(-4px);
-  box-shadow:0 10px 25px rgba(0,0,0,0.12);
+  background:#fff;padding:18px;border-radius:14px;
+  box-shadow:var(--shadow);text-align:center;
 }
 
-/* Carrusel */
+/* 🎯 CAROUSEL APPLE STYLE */
 .carousel{
-  width:100%; height:180px; position:relative; overflow:hidden;
-  border-radius:12px; margin-bottom:12px;
+  position:relative;
+  height:180px;
+  overflow:hidden;
+  border-radius:12px;
 }
 .carousel img{
-  width:100%; height:100%; object-fit:cover;
-}
-.btn-slide{
-  position:absolute; top:50%; transform:translateY(-50%);
-  background:rgba(0,0,0,0.5); color:white; border:none;
-  border-radius:50%; width:28px; height:28px;
-  cursor:pointer; font-size:18px; line-height:1;
-  display:flex; align-items:center; justify-content:center;
-}
-.prev{left:8px} .next{right:8px}
-
-/* Botón comprar */
-.btn{
-  padding:10px 16px; border-radius:8px; border:0; cursor:pointer;
-  font-weight:600; transition:0.3s;
-}
-.btn-comprar{background:var(--accent); color:#fff}
-.btn-comprar:hover{background:var(--accent-hover)}
-
-/* Carrito lateral */
-.panel-carrito{
-  position:fixed;
-  top:0;
-  right:-360px;
-  width:360px;
-  height:100%;
-  background:white;
-  box-shadow:-4px 0 15px rgba(0,0,0,0.25);
-  transition:right 0.3s ease;
-  z-index:9999;
-  display:flex;
-  flex-direction:column;
-}
-.panel-carrito.abierto {
-  right: 0;
-}
-
-
-/* Contenido scrollable */
-.panel-carrito .contenido-carrito{
-  flex:1;
-  overflow-y:auto;
-  padding:20px;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Botón fijo */
-.panel-carrito .footer-carrito{
-  padding:40px 80px;
-  border-top:1px solid #eee;
-  background:white;
-  position:sticky;
-  bottom:0;
-  z-index:50;
-}
-
-
-/* Botón enviar pedido */
-.btn-finalizar{
-  background:var(--success); 
-  color:#fff; 
   width:100%;
-  border:0; 
-  border-radius:10px; 
-  padding:12px;
-  cursor:pointer; 
-  font-weight:bold; 
+  height:100%;
+  object-fit:cover;
+  transition:opacity .35s ease, transform .35s ease;
+}
+
+/* FLECHAS */
+.btn-slide{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  background:rgba(0,0,0,.55);
+  color:#fff;
+  border:0;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:18px;
+  z-index:2;
+}
+.btn-prev{left:8px}
+.btn-next{right:8px}
+
+/* DOTS */
+.dots{
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  margin:8px 0;
+}
+.dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#ccc;
+}
+.dot.active{background:#000}
+
+.btn-comprar{
+  background:#000;color:#fff;border:0;
+  padding:10px 16px;border-radius:8px;
+  cursor:pointer;
+}
+
+/* 🛒 CARRITO */
+.panel-carrito{
+  position:fixed;top:0;right:-360px;width:360px;height:100%;
+  background:#fff;box-shadow:-4px 0 15px rgba(0,0,0,.25);
+  transition:.3s;display:flex;flex-direction:column;
+  z-index:9999;
+}
+.panel-carrito.abierto{right:0}
+.contenido-carrito{flex:1;padding:20px;overflow:auto}
+.footer-carrito{padding:20px;border-top:1px solid #eee}
+
+.btn-cerrar{
+  position:absolute;
+  top:10px;
+  right:10px;
+  background:#000;
+  color:#fff;
+  border:0;
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  cursor:pointer;
   font-size:16px;
 }
-.btn-finalizar:hover{background:#28a745}
 
-input{
-  width:100%; padding:8px; margin:6px 0;
-  border-radius:8px; border:1px solid #ccc; font-size:14px;
-}
-
-.btn-eliminar{
-  background:black; color:#fff; border:0; border-radius:6px;
-  padding:6px 10px; cursor:pointer;
-}
-
-.linea-item{
-  display:flex; justify-content:space-between; padding:8px 0;
-  border-bottom:1px solid #eee; font-size:14px;
-}
-
-/* Cerrar botón */
-.cerrar-btn{
-  background:black;
-  color:white;
-  border:0;
-  padding:6px 10px;
-  border-radius:6px;
+.btn-finalizar{
+  background:blue;color:#fff;width:100%;
+  padding:12px;border-radius:10px;
+  border:0;font-size:16px;font-weight:bold;
   cursor:pointer;
-  font-weight:bold;
 }
 
-.carrito-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:12px;
+.item-carrito{
+  display:flex;justify-content:space-between;
+  align-items:center;margin-bottom:8px;
+}
+.btn-cantidad{
+  background:#000;color:#fff;border:0;
+  border-radius:50%;width:26px;height:26px;
+  cursor:pointer;font-weight:bold;
 }
 
-/* Fondo oscuro */
-.fondo-oscuro{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.45);
-  z-index:9000;
-  opacity:1;
-  transition:0.4s ease;
+input,select{
+  width:100%;padding:8px;margin:6px 0;
+  border-radius:8px;border:1px solid #ccc;
 }
-.fondo-oscuro.oculto{
-  opacity:0;
-  pointer-events:none;
-}
-
-/* Blur del contenido */
-.contenido-desplazado{
-  transform:translateX(-220px);
-  filter:blur(3px);
-}
-
-/* Toast */
-.toast {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #111;
-  color: white;
-  padding: 12px 18px;
-  border-radius: 10px;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: 0.4s ease;
-  z-index: 99999;
-  font-weight: bold;
-}
-
-/* Mostrar toast */
-.toast.mostrar {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Pago */
 .metodoPago{
-  border:1px solid #ccc; border-radius:10px; padding:14px;
-  margin-bottom:12px; cursor:pointer; transition:0.3s;
-  background:#f9f9f9; font-size:15px;
-}
-.metodoPago.selected{
-  border-color:var(--accent);
-  background:#eaeaea;
+  border:1px solid #ccc;border-radius:10px;
+  padding:14px;margin-top:14px;
+  background:#f9f9f9;
 }
 </style>
 </head>
@@ -247,271 +146,226 @@ input{
 <body>
 
 <header>
-  PEAR STORE 
-  <span id="cartCounter">0</span>
-  <button id="btnCarrito" onclick="abrirCarrito()">Carrito</button>
+PEAR STORE
+<span id="cartCounter">0</span>
+<button id="btnCarrito" onclick="abrirCarrito()">Carrito</button>
 </header>
 
-<div id="fondoOscuro" class="fondo-oscuro oculto"></div>
-<div id="toast" class="toast">Producto agregado ✔️</div>
-
 <div class="wrap">
-  <section id="catalogo" class="catalogo"></section>
+<section id="catalogo" class="catalogo"></section>
 </div>
 
-<!-- PANEL LATERAL DEL CARRITO -->
 <div id="panelCarrito" class="panel-carrito">
-  <div class="contenido-carrito">
-    <div class="carrito-header">
-      <h3>Carrito</h3>
-      <button class="cerrar-btn" onclick="cerrarCarrito()">X</button>
-    </div>
+<button class="btn-cerrar" onclick="cerrarCarrito()">✕</button>
 
-    <div id="carritoItems"><p>El carrito está vacío.</p></div>
-    <div id="total" style="font-weight:bold;margin-top:12px">Total: $0</div>
+<div class="contenido-carrito">
+<h3>Carrito</h3>
+<div id="carritoItems">Carrito vacío</div>
 
-    <h4>Método de entrega</h4>
-    <div id="domicilioCaja" class="metodoPago selected" onclick="seleccionarEntrega('domicilio')"><b>Entrega a domicilio</b></div>
-    <div id="personalCaja" class="metodoPago" onclick="seleccionarEntrega('personal')"><b>Entrega personal</b></div>
+<p id="subtotal"><b>Subtotal:</b> $0</p>
+<p id="envio"><b>Envío:</b> $0</p>
+<p id="total"><b>Total:</b> $0</p>
 
-    <div id="direccionCampos">
-      <h4>Datos del domicilio</h4>
-      <input type="text" id="nombre" placeholder="Nombre completo">
-      <input type="text" id="calle" placeholder="Calle y número">
-      <input type="text" id="colonia" placeholder="Colonia">
-      <input type="text" id="ciudad" placeholder="Ciudad">
-    </div>
+<h4>Método de entrega</h4>
+<div class="metodoPago"><b>Entrega a domicilio (Nuevo León)</b></div>
 
-    <h4>Método de pago</h4>
-    <div id="transferenciaCaja" class="metodoPago" onclick="seleccionarPago('transferencia')">
-      <b>Transferencia Bancaria</b>
-      <div id="transferenciaInfo" style="display:none;">
-        <p>Banco: <b>Spin by OXXO</b></p>
-        <p>Cuenta/CLABE: <b>728969000160872559</b></p>
-        <p>Titular: <b>Nahum Aquino</b></p>
-        <p>Enviar comprobante: <b>8145344751</b></p>
-      </div>
-    </div>
+<h4>Datos del domicilio</h4>
+<input id="nombre" placeholder="Nombre completo">
+<input id="telefono" placeholder="Teléfono">
+<input id="calle" placeholder="Calle y número">
+<input id="colonia" placeholder="Colonia">
 
-    <div id="efectivoCaja" class="metodoPago selected" onclick="seleccionarPago('efectivo')"><b>Efectivo</b></div>
-  </div>
+<select id="municipio" onchange="actualizar()">
+<option value="">Selecciona municipio</option>
+<option>García</option>
+<option>Santa Catarina</option>
+<option>Escobedo</option>
+<option>San Nicolás de los Garza</option>
+<option>Monterrey</option>
+<option>Guadalupe</option>
+<option>San Pedro Garza García</option>
+<option>Apodaca</option>
+<option>Juárez</option>
+</select>
 
-  <!-- Botón siempre visible -->
-  <div class="footer-carrito">
-    <button class="btn-finalizar" onclick="abrirWhatsApp()">Enviar Pedido</button>
-  </div>
+<input id="referencias" placeholder="Referencias">
+
+<h4>Método de pago</h4>
+<div class="metodoPago">
+<b>Transferencia Bancaria</b>
+<p>Banco: <b>NU</b></p>
+<p>CLABE: <b>6381 8001 0191 2647 23</b></p>
+<p>Titular: <b>Nahum Aquino</b></p>
+<h3>!!! IMPORTANTE !!!</h3>
+<p>Enviar comprobante: <b>8145344751</b></p>
+<p>Una vez se refleje la transferencia se tomará el pedido</p>
+</div>
+</div>
+
+<div class="footer-carrito">
+<button class="btn-finalizar" onclick="abrirWhatsApp()">Enviar Pedido</button>
+</div>
 </div>
 
 <script>
-/* ----------------------------
-   PRODUCTOS
----------------------------- */
+// Productos y envíos
 const productos = [
-  {id:1,nombre:"AirPods 2 Pro",precio:499,imagenes:["IMG-1235.webp","IMG-1232.webp","IMG-1235.webp"]},
-  {id:2,nombre:"Cargador USB-C 35W",precio:200,imagenes:["82B70C5A-37C7-4337-8C92-CD52E626A8C1.webp","926667B9-EC57-43F3-A745-544619645143.webp"]},
-  {id:3,nombre:"Cable Lightning Original",precio:200,imagenes:["4FF89AC7-8830-4A38-B846-F11A91BE8560.webp"]},
-  {id:4,nombre:"Batería MagSafe",precio:250,imagenes:["3E6EF8DC-C60E-4895-8492-9791AB026C79.webp"]},
+  {id:1,nombre:"AirPods 2 Pro",precio:499,imagenes:["IMG-1235.webp","IMG-1232.webp","IMG-1235.webp","7A29B97B-D5EF-468E-8208-7BCA8F75A727.webp","D60C5957-0E8A-4021-A56B-A5DCDAC5CE5A.webp","31F13A19-C8B1-4BCA-8AF2-04CCB6EE4BB1.webp"]},
+  {id:2,nombre:"Cargador USB-C 35W",precio:200,imagenes:["82B70C5A-37C7-4337-8C92-CD52E626A8C1.webp","926667B9-EC57-43F3-A745-544619645143.webp","C47BD058-2904-42AC-BB5E-EB6C9608AB06.webp","03A5049B-E6B5-40F7-878D-4E630FC55454.webp"]},
+  {id:3,nombre:"Cable Lightning Original",precio:200,imagenes:["4FF89AC7-8830-4A38-B846-F11A91BE8560.webp","5C736A05-5843-4569-A60B-35ADC7E40789 (1).webp","C47BD058-2904-42AC-BB5E-EB6C9608AB06.webp","03A5049B-E6B5-40F7-878D-4E630FC55454.webp"]},
+  {id:4,nombre:"Batería MagSafe",precio:250,imagenes:["3E6EF8DC-C60E-4895-8492-9791AB026C79.webp","DE9498AD-7C7C-4BD9-BAAE-C4F040713397 (1).webp","A23B6EC0-2FE7-4287-94C4-A5A7C24F3A43.webp"]},
 ];
 
-let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-let metodoPagoSeleccionado = "efectivo";
-let metodoEntrega = "domicilio";
+const envios={
+  "García":50,"Santa Catarina":100,"Escobedo":150,
+  "San Nicolás de los Garza":200,"Monterrey":230,
+  "Guadalupe":250,"San Pedro Garza García":250,
+  "Apodaca":300,"Juárez":300
+};
 
-/* ----------------------------
-   CATALOGO
----------------------------- */
+let carrito = [];
+let indiceImg = {};
+
+// Recuperar carrito guardado
+const carritoGuardado = localStorage.getItem('carrito');
+if(carritoGuardado) carrito = JSON.parse(carritoGuardado);
+
+// Recuperar datos de domicilio guardados
+const datosGuardados = localStorage.getItem('datosDomicilio');
+if(datosGuardados){
+  const datos = JSON.parse(datosGuardados);
+  nombre.value = datos.nombre || "";
+  telefono.value = datos.telefono || "";
+  calle.value = datos.calle || "";
+  colonia.value = datos.colonia || "";
+  municipio.value = datos.municipio || "";
+  referencias.value = datos.referencias || "";
+}
+
+// Renderizar catálogo
 function renderizarCatalogo(){
-  const cont = document.getElementById("catalogo");
-  cont.innerHTML = "";
-
+  const c=document.getElementById("catalogo");
+  c.innerHTML="";
   productos.forEach(p=>{
-    const div=document.createElement("div");
-    div.className="producto";
-    div.innerHTML=`
-      <div class="carousel" data-id="${p.id}">
-        <img src="${p.imagenes[0]}" data-index="0">
-        <button class="btn-slide prev">‹</button>
-        <button class="btn-slide next">›</button>
+    indiceImg[p.id]=0;
+    c.innerHTML+=`
+      <div class="producto">
+        <div class="carousel">
+          <button class="btn-slide btn-prev" onclick="cambiarImagen(${p.id},-1)">‹</button>
+          <img id="img-${p.id}" src="${p.imagenes[0]}">
+          <button class="btn-slide btn-next" onclick="cambiarImagen(${p.id},1)">›</button>
+        </div>
+        <div class="dots" id="dots-${p.id}">
+          ${p.imagenes.map((_,i)=>`<div class="dot ${i===0?'active':''}"></div>`).join("")}
+        </div>
+        <h4>${p.nombre}</h4>
+        <p>$${p.precio}</p>
+        <button class="btn-comprar" onclick="agregar(${p.id})">Agregar</button>
       </div>
-      <h4>${p.nombre}</h4>
-      <div class="precio">$${p.precio}</div>
-      <button class="btn btn-comprar" onclick="agregarCarrito(${p.id})">Comprar</button>
     `;
-    cont.appendChild(div);
-  });
-
-  activarCarruseles();
-}
-
-function activarCarruseles(){
-  document.querySelectorAll(".carousel").forEach(c=>{
-    const id=c.dataset.id;
-    const p=productos.find(x=>x.id==id);
-    const img=c.querySelector("img");
-    let index=0;
-
-    c.querySelector(".next").onclick=()=>{ index=(index+1)%p.imagenes.length; img.src=p.imagenes[index]; };
-    c.querySelector(".prev").onclick=()=>{ index=(index-1+p.imagenes.length)%p.imagenes.length; img.src=p.imagenes[index]; };
   });
 }
 
-/* ----------------------------
-   CARRITO
----------------------------- */
-function actualizarCarrito(){
-  localStorage.setItem("carrito", JSON.stringify(carrito));
-  const cont=document.getElementById("carritoItems");
-  cont.innerHTML="";
-  if(carrito.length===0){
-    cont.innerHTML="<p>El carrito está vacío.</p>";
-    document.getElementById("total").innerText="Total: $0";
-    document.getElementById("cartCounter").innerText = 0;
-    return;
-  }
-  let total=0;
-  let totalCantidad=0;
+function cambiarImagen(id,dir){
+  const p=productos.find(x=>x.id===id);
+  const img=document.getElementById("img-"+id);
+  img.style.opacity=0;
+  img.style.transform=`translateX(${dir>0?20:-20}px)`;
+  setTimeout(()=>{
+    indiceImg[id]=(indiceImg[id]+dir+p.imagenes.length)%p.imagenes.length;
+    img.src=p.imagenes[indiceImg[id]];
+    img.style.opacity=1;
+    img.style.transform="translateX(0)";
+    actualizarDots(id);
+  },150);
+}
+
+function actualizarDots(id){
+  document.querySelectorAll(`#dots-${id} .dot`)
+    .forEach((d,i)=>d.classList.toggle("active",i===indiceImg[id]));
+}
+
+function agregar(id){
+  const p=productos.find(x=>x.id===id);
+  const i=carrito.find(x=>x.id===id);
+  i?i.cantidad++:carrito.push({...p,cantidad:1});
+  actualizar();
+}
+
+function disminuir(id){
+  const p=carrito.find(x=>x.id===id);
+  p.cantidad--;
+  if(p.cantidad<=0) carrito = carrito.filter(x=>x.id!==id);
+  actualizar();
+}
+
+function actualizar(){
+  let html="",cant=0;
   carrito.forEach(i=>{
-    const sub=i.precio*i.cantidad;
-    total+=sub;
-    totalCantidad+=i.cantidad;
-    cont.innerHTML+=`
-      <div class="linea-item">
+    html+=`
+      <div class="item-carrito">
+        <span>${i.nombre} x${i.cantidad}</span>
         <div>
-          <b>${i.nombre}</b><br>
-          $${i.precio} c/u
-          <br>
-          <div style="margin-top:6px;">
-            <button onclick="cambiarCantidad(${i.id}, -1)" style="padding:4px 10px;">−</button>
-            <span style="margin:0 8px; font-weight:bold;">${i.cantidad}</span>
-            <button onclick="cambiarCantidad(${i.id}, 1)" style="padding:4px 10px;">+</button>
-          </div>
-        </div>
-        <div style="text-align:right;">
-          <div>$${sub}</div>
-          <button class="btn-eliminar" onclick="cambiarCantidad(${i.id}, -${i.cantidad})">X</button>
+          <button class="btn-cantidad" onclick="disminuir(${i.id})">−</button>
+          <button class="btn-cantidad" onclick="agregar(${i.id})">+</button>
         </div>
       </div>
     `;
+    cant+=i.cantidad;
   });
+  carritoItems.innerHTML = html || "Carrito vacío";
+  cartCounter.innerText = cant;
+  actualizarTotal();
 
-  document.getElementById("total").innerText = "Total: $" + total;
-  document.getElementById("cartCounter").innerText = totalCantidad;
+  // Guardar carrito
+  localStorage.setItem('carrito', JSON.stringify(carrito));
+
+  // Guardar datos de domicilio
+  const datos = {
+    nombre: nombre.value,
+    telefono: telefono.value,
+    calle: calle.value,
+    colonia: colonia.value,
+    municipio: municipio.value,
+    referencias: referencias.value
+  };
+  localStorage.setItem('datosDomicilio', JSON.stringify(datos));
 }
 
-function cambiarCantidad(id, cambio){
-  let item = carrito.find(x=>x.id===id);
-  if(!item) return;
-  item.cantidad += cambio;
-  if(item.cantidad <=0){ carrito = carrito.filter(x=>x.id!==id); }
-  actualizarCarrito();
+function actualizarTotal(){
+  const m = municipio.value;
+  const envio = envios[m] || 0;
+  const subtotal = carrito.reduce((s,i)=>s+i.precio*i.cantidad,0);
+  subtotalEl.innerText="Subtotal: $"+subtotal;
+  envioEl.innerText="Envío: $"+envio;
+  totalEl.innerText="Total: $"+(subtotal+envio);
 }
 
-/* ----------------------------
-   TOAST
----------------------------- */
-function mostrarToast(){
-  const t = document.getElementById("toast");
-  t.classList.add("mostrar");
-  setTimeout(()=> t.classList.remove("mostrar"), 2000);
+function abrirCarrito(){ panelCarrito.classList.add("abierto"); }
+function cerrarCarrito(){ panelCarrito.classList.remove("abierto"); }
+
+function abrirWhatsApp(){
+  if(carrito.length===0){ alert("El carrito está vacío"); return; }
+  if(!nombre.value||!telefono.value||!calle.value||!colonia.value||!municipio.value){
+    alert("Completa todos los datos"); return;
+  }
+  let msg="Hola, quiero hacer un pedido:\n\n";
+  carrito.forEach(i=>msg+=`${i.nombre} x${i.cantidad}\n`);
+  msg+=`\nTotal: $${carrito.reduce((s,i)=>s+i.precio*i.cantidad,0)+(envios[municipio.value]||0)}`;
+  window.open("https://wa.me/5218145344751?text="+encodeURIComponent(msg));
 }
 
-/* ----------------------------
-   ABRIR / CERRAR CARRITO
----------------------------- */
-function abrirCarrito(){
-  document.getElementById("panelCarrito").classList.add("abierto");
-  document.getElementById("fondoOscuro").classList.remove("oculto");
-  document.querySelector(".wrap").classList.add("contenido-desplazado");
-}
-function cerrarCarrito(){
-  document.getElementById("panelCarrito").classList.remove("abierto");
-  document.getElementById("fondoOscuro").classList.add("oculto");
-  document.querySelector(".wrap").classList.remove("contenido-desplazado");
-}
-document.getElementById("fondoOscuro").addEventListener("click", cerrarCarrito);
+// Inicializar
+renderizarCatalogo();
+actualizar();
 
-/* ----------------------------
-   DRAG PARA CERRAR
----------------------------- */
-let startX = 0;
-document.getElementById("panelCarrito").addEventListener("touchstart", e=>{ startX = e.touches[0].clientX; });
-document.getElementById("panelCarrito").addEventListener("touchmove", e=>{
-  let diff = startX - e.touches[0].clientX;
-  if(diff < -60) cerrarCarrito();
+// Guardar datos al cambiar cualquier input
+[nombre, telefono, calle, colonia, municipio, referencias].forEach(el=>{
+  el.addEventListener('input', actualizar);
 });
 
-/* ----------------------------
-   AGREGAR AL CARRITO
----------------------------- */
-function agregarCarrito(id){
-  const p = productos.find(x=>x.id===id);
-  let item = carrito.find(x=>x.id===id);
-  if(item) item.cantidad++;
-  else carrito.push({id:p.id,nombre:p.nombre,precio:p.precio,cantidad:1});
-  actualizarCarrito();
-  mostrarToast();
-}
-
-/* ----------------------------
-   ENTREGA Y PAGO
----------------------------- */
-function seleccionarEntrega(tipo){
-  metodoEntrega = tipo;
-  document.getElementById("domicilioCaja").classList.remove("selected");
-  document.getElementById("personalCaja").classList.remove("selected");
-  if(tipo==="domicilio"){
-    document.getElementById("domicilioCaja").classList.add("selected");
-    document.getElementById("direccionCampos").style.display="block";
-  } else {
-    document.getElementById("personalCaja").classList.add("selected");
-    document.getElementById("direccionCampos").style.display="none";
-  }
-}
-function seleccionarPago(metodo){
-  metodoPagoSeleccionado = metodo;
-  document.getElementById("transferenciaCaja").classList.remove("selected");
-  document.getElementById("efectivoCaja").classList.remove("selected");
-  if(metodo==="transferencia"){
-    document.getElementById("transferenciaCaja").classList.add("selected");
-    document.getElementById("transferenciaInfo").style.display="block";
-  } else {
-    document.getElementById("efectivoCaja").classList.add("selected");
-    document.getElementById("transferenciaInfo").style.display="none";
-  }
-}
-
-/* ----------------------------
-   ENVIAR PEDIDO POR WHATSAPP
----------------------------- */
-function abrirWhatsApp() {
-  if (carrito.length === 0) { alert("El carrito está vacío."); return; }
-
-  let mensaje = "Hola, quiero hacer un pedido:\n";
-  carrito.forEach(i => {
-    mensaje += `${i.nombre} x${i.cantidad} = $${i.precio*i.cantidad}\n`;
-  });
-  mensaje += `Total: $${carrito.reduce((sum,i)=>sum+i.precio*i.cantidad,0)}\n`;
-  mensaje += `Método de entrega: ${metodoEntrega}\n`;
-  if(metodoEntrega==="domicilio"){
-    mensaje += `Nombre: ${document.getElementById("nombre").value}\n`;
-    mensaje += `Calle: ${document.getElementById("calle").value}\n`;
-    mensaje += `Colonia: ${document.getElementById("colonia").value}\n`;
-    mensaje += `Ciudad: ${document.getElementById("ciudad").value}\n`;
-  }
-  mensaje += `Método de pago: ${metodoPagoSeleccionado}`;
-
-  let url = "https://wa.me/5218145344751?text=" + encodeURIComponent(mensaje);
-  window.open(url, "_blank");
-}
-
-/* ----------------------------
-   INICIALIZAR
----------------------------- */
-renderizarCatalogo();
-actualizarCarrito();
+// Actualizar totales al cargar la página
+document.addEventListener('DOMContentLoaded', actualizar);
 </script>
-
 </body>
 </html>
- 
-
