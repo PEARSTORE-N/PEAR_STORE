@@ -140,6 +140,11 @@ input,select{
   padding:14px;margin-top:14px;
   background:#f9f9f9;
 }
+.stock{
+  font-size:14px;
+  color:#555;
+  margin-top:4px;
+}
 </style>
 </head>
 
@@ -208,13 +213,14 @@ PEAR STORE
 </div>
 
 <script>
-// Productos y envíos
+// Productos con stock
 const productos = [
-  {id:1,nombre:"AirPods 2 Pro",precio:499,imagenes:["IMG-1235.webp","IMG-1232.webp","IMG-1235.webp","7A29B97B-D5EF-468E-8208-7BCA8F75A727.webp","D60C5957-0E8A-4021-A56B-A5DCDAC5CE5A.webp","31F13A19-C8B1-4BCA-8AF2-04CCB6EE4BB1.webp"]},
-  {id:2,nombre:"Cargador USB-C 35W",precio:200,imagenes:["82B70C5A-37C7-4337-8C92-CD52E626A8C1.webp","926667B9-EC57-43F3-A745-544619645143.webp","C47BD058-2904-42AC-BB5E-EB6C9608AB06.webp","03A5049B-E6B5-40F7-878D-4E630FC55454.webp"]},
-  {id:3,nombre:"Cable Lightning Original",precio:200,imagenes:["4FF89AC7-8830-4A38-B846-F11A91BE8560.webp","5C736A05-5843-4569-A60B-35ADC7E40789 (1).webp","C47BD058-2904-42AC-BB5E-EB6C9608AB06.webp","03A5049B-E6B5-40F7-878D-4E630FC55454.webp"]},
-  {id:4,nombre:"Batería MagSafe",precio:250,imagenes:["3E6EF8DC-C60E-4895-8492-9791AB026C79.webp","DE9498AD-7C7C-4BD9-BAAE-C4F040713397 (1).webp","A23B6EC0-2FE7-4287-94C4-A5A7C24F3A43.webp"]},
+  {id:1, nombre:"AirPods 2 Pro", precio:499, stock:0, imagenes:["IMG-1235.webp","IMG-1232.webp","IMG-1235.webp","7A29B97B-D5EF-468E-8208-7BCA8F75A727.webp","D60C5957-0E8A-4021-A56B-A5DCDAC5CE5A.webp","31F13A19-C8B1-4BCA-8AF2-04CCB6EE4BB1.webp"]},
+  {id:2, nombre:"Cargador USB-C 35W", precio:200, stock:2, imagenes:["82B70C5A-37C7-4337-8C92-CD52E626A8C1.webp","926667B9-EC57-43F3-A745-544619645143.webp","C47BD058-2904-42AC-BB5E-EB6C9608AB06.webp","03A5049B-E6B5-40F7-878D-4E630FC55454.webp"]},
+  {id:3, nombre:"Cable Lightning Original", precio:200, stock:0, imagenes:["4FF89AC7-8830-4A38-B846-F11A91BE8560.webp","5C736A05-5843-4569-A60B-35ADC7E40789 (1).webp","C47BD058-2904-42AC-BB5E-EB6C9608AB06.webp","03A5049B-E6B5-40F7-878D-4E630FC55454.webp"]},
+  {id:4, nombre:"Batería MagSafe", precio:250, stock:2, imagenes:["3E6EF8DC-C60E-4895-8492-9791AB026C79.webp","DE9498AD-7C7C-4BD9-BAAE-C4F040713397 (1).webp","A23B6EC0-2FE7-4287-94C4-A5A7C24F3A43.webp"]},
 ];
+
 
 const envios={
   "García":50,"Santa Catarina":100,"Escobedo":150,
@@ -226,28 +232,15 @@ const envios={
 let carrito = [];
 let indiceImg = {};
 
-// Recuperar carrito guardado
-const carritoGuardado = localStorage.getItem('carrito');
-if(carritoGuardado) carrito = JSON.parse(carritoGuardado);
-
-// Recuperar datos de domicilio guardados
-const datosGuardados = localStorage.getItem('datosDomicilio');
-if(datosGuardados){
-  const datos = JSON.parse(datosGuardados);
-  nombre.value = datos.nombre || "";
-  telefono.value = datos.telefono || "";
-  calle.value = datos.calle || "";
-  colonia.value = datos.colonia || "";
-  municipio.value = datos.municipio || "";
-  referencias.value = datos.referencias || "";
-}
-
 // Renderizar catálogo
 function renderizarCatalogo(){
   const c=document.getElementById("catalogo");
   c.innerHTML="";
   productos.forEach(p=>{
     indiceImg[p.id]=0;
+    // Calcular cantidad en carrito
+    const enCarrito = carrito.find(i=>i.id===p.id)?.cantidad || 0;
+    const stockDisponible = p.stock - enCarrito;
     c.innerHTML+=`
       <div class="producto">
         <div class="carousel">
@@ -260,7 +253,8 @@ function renderizarCatalogo(){
         </div>
         <h4>${p.nombre}</h4>
         <p>$${p.precio}</p>
-        <button class="btn-comprar" onclick="agregar(${p.id})">Agregar</button>
+        <p class="stock">Stock: ${stockDisponible}</p>
+        <button class="btn-comprar" onclick="agregar(${p.id})" ${stockDisponible===0?'disabled':''}>Agregar</button>
       </div>
     `;
   });
@@ -288,7 +282,18 @@ function actualizarDots(id){
 function agregar(id){
   const p=productos.find(x=>x.id===id);
   const i=carrito.find(x=>x.id===id);
-  i?i.cantidad++:carrito.push({...p,cantidad:1});
+  
+  const stockDisponible = p.stock - (i?.cantidad || 0);
+  if(stockDisponible<=0){
+    alert("No hay suficiente stock");
+    return;
+  }
+
+  if(i){
+    i.cantidad++;
+  } else {
+    carrito.push({...p, cantidad:1});
+  }
   actualizar();
 }
 
@@ -316,29 +321,16 @@ function actualizar(){
   carritoItems.innerHTML = html || "Carrito vacío";
   cartCounter.innerText = cant;
   actualizarTotal();
-
-  // Guardar carrito
-  localStorage.setItem('carrito', JSON.stringify(carrito));
-
-  // Guardar datos de domicilio
-  const datos = {
-    nombre: nombre.value,
-    telefono: telefono.value,
-    calle: calle.value,
-    colonia: colonia.value,
-    municipio: municipio.value,
-    referencias: referencias.value
-  };
-  localStorage.setItem('datosDomicilio', JSON.stringify(datos));
+  renderizarCatalogo(); // actualizar stock y botones
 }
 
 function actualizarTotal(){
   const m = municipio.value;
   const envio = envios[m] || 0;
   const subtotal = carrito.reduce((s,i)=>s+i.precio*i.cantidad,0);
-  subtotalEl.innerText="Subtotal: $"+subtotal;
-  envioEl.innerText="Envío: $"+envio;
-  totalEl.innerText="Total: $"+(subtotal+envio);
+  document.getElementById("subtotal").innerText="Subtotal: $"+subtotal;
+  document.getElementById("envio").innerText="Envío: $"+envio;
+  document.getElementById("total").innerText="Total: $"+(subtotal+envio);
 }
 
 function abrirCarrito(){ panelCarrito.classList.add("abierto"); }
@@ -358,14 +350,6 @@ function abrirWhatsApp(){
 // Inicializar
 renderizarCatalogo();
 actualizar();
-
-// Guardar datos al cambiar cualquier input
-[nombre, telefono, calle, colonia, municipio, referencias].forEach(el=>{
-  el.addEventListener('input', actualizar);
-});
-
-// Actualizar totales al cargar la página
-document.addEventListener('DOMContentLoaded', actualizar);
 </script>
 </body>
 </html>
