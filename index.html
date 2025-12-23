@@ -337,14 +337,60 @@ function abrirCarrito(){ panelCarrito.classList.add("abierto"); }
 function cerrarCarrito(){ panelCarrito.classList.remove("abierto"); }
 
 function abrirWhatsApp(){
-  if(carrito.length===0){ alert("El carrito está vacío"); return; }
-  if(!nombre.value||!telefono.value||!calle.value||!colonia.value||!municipio.value){
-    alert("Completa todos los datos"); return;
+  if(carrito.length === 0){
+    alert("Carrito vacío");
+    return;
   }
-  let msg="Hola, quiero hacer un pedido:\n\n";
-  carrito.forEach(i=>msg+=`${i.nombre} x${i.cantidad}\n`);
-  msg+=`\nTotal: $${carrito.reduce((s,i)=>s+i.precio*i.cantidad,0)+(envios[municipio.value]||0)}`;
-  window.open("https://wa.me/5218145344751?text="+encodeURIComponent(msg));
+
+  if(!nombre.value || !telefono.value || !calle.value || !colonia.value || !municipio.value){
+    alert("Completa todos los datos");
+    return;
+  }
+
+  const subtotal = carrito.reduce((s,i)=>s + i.precio*i.cantidad, 0);
+  const envio = envios[municipio.value] || 0;
+  const total = subtotal + envio;
+
+  let msg =
+  "🖤🛒 *PEAR STORE*\n" +
+  "━━━━━━━━━━━━━━━━━━\n" +
+  "📦 *NUEVO PEDIDO*\n\n" +
+
+  "👤 *DATOS DEL CLIENTE*\n" +
+  "━━━━━━━━━━━━━━━━━━\n" +
+  "▪ Nombre: " + nombre.value + "\n" +
+  "▪ Teléfono: " + telefono.value + "\n\n" +
+
+  "🏠 *DIRECCIÓN DE ENTREGA*\n" +
+  "━━━━━━━━━━━━━━━━━━\n" +
+  "▪ Calle: " + calle.value + "\n" +
+  "▪ Colonia: " + colonia.value + "\n" +
+  "▪ Municipio: " + municipio.value + "\n" +
+  "▪ Referencias: " + (referencias.value || "N/A") + "\n\n" +
+
+  "🛍️ *PRODUCTOS*\n" +
+  "━━━━━━━━━━━━━━━━━━\n";
+
+  carrito.forEach(i=>{
+    msg += "• " + i.nombre + 
+           "\n   Cantidad: " + i.cantidad +
+           "\n   Subtotal: $" + (i.precio*i.cantidad) + "\n\n";
+  });
+
+  msg +=
+  "💳 *RESUMEN DE PAGO*\n" +
+  "━━━━━━━━━━━━━━━━━━\n" +
+  "▪ Subtotal: $" + subtotal + "\n" +
+  "▪ Envío: $" + envio + "\n" +
+  "━━━━━━━━━━━━━━━━━━\n" +
+  "💰 *TOTAL A PAGAR: $" + total + "*\n\n" +
+
+  "📲 Pedido enviado desde la tienda PEAR STORE";
+
+  window.open(
+    "https://wa.me/5218145344751?text=" + encodeURIComponent(msg),
+    "_blank"
+  );
 }
 
 // Inicializar
