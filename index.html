@@ -145,6 +145,37 @@ input,select{
   color:#555;
   margin-top:4px;
 }
+.ver-caracteristicas{
+  cursor:pointer;
+  font-size:14px;
+  font-weight:600;
+  margin:6px 0;
+  user-select:none;
+}
+
+.bloque-caracteristicas{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .35s ease;
+  text-align:left;
+  font-size:13px;
+  margin-bottom:8px;
+}
+
+.bloque-caracteristicas.abierto{
+  max-height:300px;
+}
+
+.bloque-caracteristicas ul{
+  padding-left:10px;
+  margin:6px 0;
+}
+
+.bloque-caracteristicas li{
+  list-style:none;
+  margin-bottom:4px;
+}
+
 </style>
 </head>
 
@@ -213,9 +244,17 @@ PEAR STORE
 </div>
 
 <script>
+  function toggleCaracteristicas(id){
+  const box = document.getElementById("car-"+id);
+  const flecha = document.getElementById("flecha-"+id);
+
+  box.classList.toggle("abierto");
+  flecha.innerText = box.classList.contains("abierto") ? "▲" : "▼";
+}
+
 // Productos con stock
 const productos = [
-  {id:1, nombre:"AirPods 2 Pro", precio:499, stock:3, imagenes:["A21.webp","A22.webp","A27.webp","A26.webp","A23.webp","A24.webp","A25.webp"]},
+  {id:1, nombre:"AirPods 2 Pro", precio:499, stock:3, caracteristicas: [ "Cancelación de ruido REAL", "Entrada tipo C", "Interfaz visible en iOS (como originales)", "Carga inalámbrica", "Incluye cable de carga", "Incluye almohadillas de diferentes tamaños", "GPS (localización desde la app 'Encontrar')", "Certificados Apple", "Control táctil en cada AirPod", "Duración de batería de 6 a 7 horas", "Incluye ticket" ], imagenes:["A21.webp","A22.webp","A27.webp","A26.webp","A23.webp","A24.webp","A25.webp"]},
   {id:2, nombre:"AirPods 3ra gen", precio:499, stock:0, imagenes:["A31.webp","A32.webp","A33.webp","A34.webp","A35.webp","A36.webp","A37.webp","A38.webp"]},
   {id:3, nombre:"Cargador USB-C 35W", precio:200, stock:3, imagenes:["CC1.webp","CC2.webp","CC3.webp","CC4.webp"]},
   {id:4, nombre:"Cargador Lightning", precio:200, stock:0, imagenes:["CL1.webp","CL2.webp","CL3.webp","CL4.webp"]},
@@ -254,6 +293,18 @@ function renderizarCatalogo(){
         </div>
         <h4>${p.nombre}</h4>
         <p>$${p.precio}</p>
+        <p class="ver-caracteristicas" onclick="toggleCaracteristicas(${p.id})">
+  Ver características <span id="flecha-${p.id}">▼</span>
+</p>
+
+<div class="bloque-caracteristicas" id="car-${p.id}">
+  <ul>
+    ${p.caracteristicas
+      ? p.caracteristicas.map(c => `<li>• ${c}</li>`).join("")
+      : "<li>No hay características</li>"}
+  </ul>
+</div>
+
         <p class="stock">Stock: ${stockDisponible}</p>
         <button class="btn-comprar" onclick="agregar(${p.id})" ${stockDisponible===0?'disabled':''}>Agregar</button>
       </div>
@@ -400,12 +451,3 @@ actualizar();
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
